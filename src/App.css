@@ -1,3 +1,15 @@
+*{
+  font-size: 1rem;
+
+
+}
+
+body{
+  width:100vw;
+  height: 100vh;
+  background-color: #2E3440
+}
+
 .App {
   text-align: center;
 }
