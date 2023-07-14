@@ -76,8 +76,8 @@ const Quiz = (props) => {
         <>
             {!loading && questions[counter]?
           
-            <Question question={questions[counter].question} options={questions[counter].options} 
-            handleCounter={handleCounter}   answer={handleAnswers} calculateScore={calculateScore} guess={questions[counter].guess} counter={counter}/>
+                <Question question={questions[counter].question} options={questions[counter].options}
+                    handleCounter={handleCounter} answer={handleAnswers} calculateScore={calculateScore} guess={questions[counter].guess} counter={counter} category={ location.state.category} />
 
           
            : <div style={{display:'flex',alignItems:'center',height:'100vh',width:'100vw',justifyContent:'center'}}><CircularProgress  size={100} color='secondary'/></div>

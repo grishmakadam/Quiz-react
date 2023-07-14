@@ -5,10 +5,11 @@ import axios from 'axios';
 import Button1 from './Button1';
 import { Link } from 'react-router-dom';
 import {CircularProgress} from '@material-ui/core';
+import Navbar from './Navbar';
 
 const Main = () => {
     const [categories, setCategories] = useState([])
-const [loading,setLoading]=useState(false)
+    const [loading,setLoading]=useState(false)
     const [category, setCategory] = useState()
 
     useEffect(() => {
@@ -47,17 +48,19 @@ const [loading,setLoading]=useState(false)
     
     return (
         <>
-        <Container maxWidth='md' style={{backgroundColor:'#2E3440',height:'100vh',display:'flex',flexDirection:'column',justifyContent:'space-around'}} >
-            <Typography variant="h3" align='center' style={{ padding: '1rem', fontWeight: 'bold', color: '#66bb6a' }}>Shivam's Brain</Typography>
+            < Grid container sx={{overflow:"hidden"}} justifyContent='center' alignItems='center'  >
+             
+                
 
-            <Grid container spacing={3}>
+            <Grid item container spacing={3} style={{margin:"40px"}}>
 
                 {loading && <div style={{display:'flex',alignItems:'center',height:'100vh',width:'100vw',justifyContent:'center'}}><CircularProgress  size={100} color='secondary'/></div>
 }
                 {categories.map(item => <Button1 item={item} key={item.category} handleCategory={handleCategory}   />)}
-            </Grid>
-            <div style={{display:'flex',justifyContent:'center'}}>
-            <Link to="/quiz" state={{category:category}} style={{textDecoration:'none'}}>
+                </Grid>
+                
+            <Grid item  justifyContent='center'>
+            <Link to="/quiz" state={{category:category}} sx={{textDecoration:'none'}}>
             <Button
                 variant="contained"
                 style={{ backgroundColor: "#66bb6a",marginTop:'2rem',fontWeight:'bold'}}   
@@ -66,8 +69,8 @@ const [loading,setLoading]=useState(false)
                 Start Quiz
             </Button>
             </Link>
-            </div>
-        </Container>
+            </Grid>
+        </Grid>
         </>
     )
 }

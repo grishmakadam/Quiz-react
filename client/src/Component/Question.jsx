@@ -20,7 +20,7 @@ const Question = (props) => {
           <Button onClick={props.handleCounter.bind(null, '-')} disabled={props.counter==0?true:false} className={classes.button} style={{backgroundColor:'#66bb6a'}}>Previous</Button>
           <Button onClick={props.handleCounter.bind(null, '+')} disabled={props.counter==4?true:false} className={classes.button} style={{backgroundColor:'#66bb6a'}}>Next</Button>
           </div>
-          {props.counter==4 && <Link to="/quiz-result" state={{score:props.calculateScore()}}><Button style={{textDecoration:'none',backgroundColor:'#66bb6a'}}>Submit</Button></Link>}
+          {props.counter==4 && <Link to="/quiz-result" state={{score:props.calculateScore(),category:props.category}}><Button style={{textDecoration:'none',backgroundColor:'#66bb6a'}}>Submit</Button></Link>}
         </div>
 
 
