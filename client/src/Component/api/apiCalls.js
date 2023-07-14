@@ -4,6 +4,7 @@ import {
   verify_url,
   add_score_url,
   logout_user_url,
+  login_user_url,
 } from "./endpoints";
 import axios from "axios";
 
@@ -54,6 +55,17 @@ export const add_score_api = (body) => {
   });
 };
 
+export const login_api = (body) => {
+  return apiCall({
+    url: base_url + login_user_url,
+    data: { ...body },
+    method: "POST",
+    header: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  })
+}
 export const logout_api = () => {
   return apiCall({
     url: base_url + logout_user_url,

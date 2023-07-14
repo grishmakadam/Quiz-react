@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { signup_api } from "./api/apiCalls";
+import { login_api, signup_api } from "./api/apiCalls";
 import axios from "axios";
 import MailIcon from "@mui/icons-material/Mail";
 import { AccountCircle, Visibility, VisibilityOff } from "@mui/icons-material";
@@ -59,9 +59,9 @@ const Cred = () => {
       const res = await signup_api(data);
       if (res.success) {
         dispatch({ type: "login", payload: { ...res } });
-        navigate("/")
+        navigate("/");
       } else {
-        console.log("error")
+        console.log("error");
       }
     } else {
       //await login(data)
@@ -78,6 +78,13 @@ const Cred = () => {
       }
       if (m == 1) {
         return;
+      }
+      const res = await login_api(data);
+      if (res.success) {
+        dispatch({ type: "login", payload: { ...res } });
+        navigate("/");
+      } else {
+        console.log("error");
       }
     }
   };

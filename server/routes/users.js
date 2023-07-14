@@ -6,6 +6,7 @@ const {
   clearCookie,
 } = require("../utils/createAndVerifyToken");
 router.post("/signup", userController.signup);
+router.post("/login", userController.login);
 router.post("/", userVerification, (req, res) => {
   return res.json({ name: req.name, email: req.email });
 });
