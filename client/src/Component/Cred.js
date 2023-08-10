@@ -18,11 +18,17 @@ import MailIcon from "@mui/icons-material/Mail";
 import { AccountCircle, Visibility, VisibilityOff } from "@mui/icons-material";
 import Input from "./Input";
 import { UserContext } from "./Context";
-
+import { useDispatch } from "react-redux";
+import { logIn, logOut } from "./redux/reducers/userSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import classes from "./style.module.css";
 const Cred = () => {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
-  const { dispatch } = useContext(UserContext);
+  // const { dispatch } = useContext(UserContext);
+  const dispatch = useDispatch();
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -57,11 +63,15 @@ const Cred = () => {
       }
 
       const res = await signup_api(data);
+
       if (res.success) {
-        dispatch({ type: "login", payload: { ...res } });
+        dispatch(logIn(res));
+        setTimeout(() => {
+          toast.success("User logged in successfully!!");
+        }, 10);
         navigate("/");
       } else {
-        console.log("error");
+        toast.error(res.message);
       }
     } else {
       //await login(data)
@@ -80,10 +90,15 @@ const Cred = () => {
         return;
       }
       const res = await login_api(data);
+
       if (res.success) {
-        dispatch({ type: "login", payload: { ...res } });
+        dispatch(logIn(res));
         navigate("/");
+        setTimeout(() => {
+          toast.success("User logged in successfully!!");
+        }, 10);
       } else {
+        toast.error("Something went wrong!!!");
         console.log("error");
       }
     }
@@ -96,13 +111,7 @@ const Cred = () => {
       navigate("/user/signup");
     }
   };
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
 
-    setOpen(false);
-  };
   const [type, setType] = useState("signup");
   const [valid, setValid] = useState({
     name: true,
@@ -137,32 +146,30 @@ const Cred = () => {
     if (id != type) {
       if (id == "login") {
         setType("login");
+        setData({
+          email: "",
+          password: "",
+        });
+        setValid({
+          password: true,
+          email: true,
+        });
       } else {
         setType("signup");
-      }
-      setData({
-        name: "",
-        email: "",
-        password: "",
-      });
-    } else {
-      if (id == "login") {
-        setType("login");
-        // setError(lerror)
-        // setLoading(lLoading)
-      } else {
-        setType("signup");
-        setData((prevData) => ({
-          ...prevData,
+        setData({
+          email: "",
+          password: "",
+          name: "",
           confirm: "",
-        }));
-
-        //setError(signerror)
-
-        // setLoading(signloading)
+        });
+        setValid({
+          password: true,
+          email: true,
+          name: true,
+          confirm: true,
+        });
       }
     }
-    console.log(error);
   }, [id]);
   return (
     <Grid
@@ -174,20 +181,9 @@ const Cred = () => {
         backgroundColor: "#2E3440",
       }}
     >
-      <form
-        onSubmit={submitHandler}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "20px 20px",
-          boxShadow: "1px 1px #ccc",
-          backgroundColor: "#D8DEE9",
-          borderRadius: "10px",
-        }}
-      >
+      <form onSubmit={submitHandler} className={classes.cred}>
         <Typography style={{ fontSize: "20px", color: "#2E3440" }}>
-          {type == "login" ? "Login" : "Signup"}
+          {type == "login" ? "Login" : "Register"}
         </Typography>
 
         <Grid
@@ -368,6 +364,18 @@ const Cred = () => {
           </Grid>
         </Grid>
       </form>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Grid>
   );
 };

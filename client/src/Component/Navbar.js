@@ -19,11 +19,16 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./Context";
 import { logout_api } from "./api/apiCalls";
-
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "./redux/reducers/userSlice";
+import { clearOut } from "./redux/reducers/questionsSlice";
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { user, dispatch } = useContext(UserContext);
+  // const { user, dispatch } = useContext(UserContext);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
   const navigate = useNavigate();
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -44,7 +49,8 @@ function Navbar() {
 
   const handleClick = async () => {
     const res = await logout_api();
-    dispatch({ type: "logout" });
+    dispatch(logOut());
+    dispatch(clearOut());
     navigate("/");
   };
   return (
@@ -62,35 +68,36 @@ function Navbar() {
           disableGutters
           style={{ display: "flex", justifyContent: "space-between" }}
         >
-          <Box sx={{ padding: 2, display: "flex", alignItems: "center" }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <PsychologyIcon fontSize="large" />
-            </IconButton>
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              sx={{
-                mr: 2,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              Quiz
-            </Typography>
+          <Box sx={{ padding: 2, display: "flex", alignItems: "center",justifyContent:'center' }}>
+            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+              <IconButton
+                size="medium"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                color="secondary"
+              >
+                <PsychologyIcon fontSize="large" />
+              </IconButton>
+              <Typography
+                variant="h5"
+                noWrap
+                component="a"
+                style={{
+                  mr: 2,
+
+                  fontWeight: 700,
+                  letterSpacing: ".3rem",
+                  color: "secondary.main",
+               
+                }}
+              >
+                Quiz
+              </Typography>
+            </Link>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            {user && (
+            {user.name != "" && (
               <>
                 <Avatar onClick={handleOpenNavMenu}>GK</Avatar>
                 <Menu
@@ -111,16 +118,22 @@ function Navbar() {
                     display: { xs: "block", md: "none" },
                   }}
                 >
-                  <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center" onClick={handleClick}>
-                      Log Out
-                    </Typography>
+                  <MenuItem>
+                    <Link
+                      to="/show-scores"
+                      style={{ color: "#080906", textDecoration: "none" }}
+                    >
+                      <Typography>Scores</Typography>
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Typography onClick={handleClick}>Log Out</Typography>
                   </MenuItem>
                 </Menu>
               </>
             )}
 
-            {!user && (
+            {user.name == "" && (
               <>
                 <IconButton
                   size="large"
@@ -150,20 +163,20 @@ function Navbar() {
                     display: { xs: "block", md: "none" },
                   }}
                 >
-                  <Link
-                    to="/user/login"
-                    style={{ color: "#080906", textDecoration: "none" }}
-                  >
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Typography textAlign="center">Login</Typography>
-                    </MenuItem>
-                  </Link>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Link
+                      to="/user/login"
+                      style={{ color: "#080906", textDecoration: "none" }}
+                    >
+                      <Typography>Login</Typography>
+                    </Link>
+                  </MenuItem>
                   <MenuItem onClick={handleCloseNavMenu}>
                     <Link
                       to="/user/signup"
                       style={{ color: "#080906", textDecoration: "none" }}
                     >
-                      <Typography textAlign="center">Sign Up</Typography>
+                      <Typography>Sign Up</Typography>
                     </Link>
                   </MenuItem>
                 </Menu>
@@ -178,10 +191,13 @@ function Navbar() {
               justifyContent: "flex-end",
             }}
           >
-            {user && (
+            {user.name != "" && (
               <>
-                <IconButton onClick={handleOpenNavMenu}>
-                  Grishma Kadam
+                <IconButton
+                  onClick={handleOpenNavMenu}
+                  style={{ color: "#FFF" }}
+                >
+                  {user.name}
                 </IconButton>
                 <Menu
                   id="menu-appbar"
@@ -201,15 +217,21 @@ function Navbar() {
                     display: { xs: "block", md: "none" },
                   }}
                 >
+                  <MenuItem>
+                    <Link
+                      to="/show-scores"
+                      style={{ color: "#080906", textDecoration: "none" }}
+                    >
+                      <Typography>Score</Typography>
+                    </Link>
+                  </MenuItem>
                   <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center" onClick={handleClick}>
-                      Log Out
-                    </Typography>
+                    <Typography onClick={handleClick}>Log Out</Typography>
                   </MenuItem>
                 </Menu>
               </>
             )}
-            {!user && (
+            {user.name == "" && (
               <>
                 <Link to="/user/signup" style={{ textDecoration: "none" }}>
                   <Button

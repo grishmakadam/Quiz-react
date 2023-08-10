@@ -6,9 +6,9 @@ module.exports = {
     try {
       const { name, email, password } = req.body;
       const t = await User.findOne({ where: { email: email } });
-
+      console.log(t);
       if (t) {
-        res.status(400).json({ message: "User already exists!!!" });
+        return res.status(400).json({ message: "User already exists!!!" });
       }
       const salt = await bcrypt.genSalt();
       const hash = await bcrypt.hash(password, salt);
@@ -40,9 +40,9 @@ module.exports = {
       const { email, password } = req.body;
 
       const u = await User.findOne({ where: { email: email } });
-      console.log(u)
+     
       if (!u) {
-        res.status(400).json({ message: "User does not exist" });
+        return res.status(400).json({ message: "User does not exist" });
       }
 
       const auth = await bcrypt.compare(password, u.password);
@@ -61,7 +61,6 @@ module.exports = {
         email: u.email,
       });
     } catch (e) {
-     
       res.status(500).json({ message: "Something went wrong!!!" });
     }
   },

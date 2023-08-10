@@ -20,13 +20,15 @@ module.exports = {
   },
   showScore: async (req, res) => {
     try {
-      const { email } = req.params
+      console.log("show scores");
+      const { email } = req.params;
       const user = await User.findOne({ where: { email: email } });
-      const scores = await Score.findAll({ where: { userId: user.id } })
-      return res.json(scores)
+
+      const scores = await Score.findAll({ where: { userId: user.id } });
+      console.log(scores);
+      return res.json({success:true,scores:scores});
     } catch (e) {
-      console.log(e.message);
       return res.status(500).json({ message: "Something went wrong!!!" });
     }
-  }
+  },
 };

@@ -5,6 +5,7 @@ import {
   add_score_url,
   logout_user_url,
   login_user_url,
+  show_scores_url,
 } from "./endpoints";
 import axios from "axios";
 
@@ -73,3 +74,12 @@ export const logout_api = () => {
     withCredentials: true,
   });
 };
+
+
+export const show_scores = (email) => {
+  return apiCall({
+    url: base_url + show_scores_url+email,
+    method: "GET",
+    withCredentials: true,
+  })
+}
